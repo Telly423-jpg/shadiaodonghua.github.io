@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤪 沙雕動畫星球 - 快樂源泉集中營</title>
+
+    <!-- 全域修復：忽略 ResizeObserver 良性通知警告與無害未捕捉錯誤 -->
+    <script>
+        window.addEventListener('error', function (e) {
+            if (e.message && (
+                e.message.includes('ResizeObserver loop completed with undelivered notifications') ||
+                e.message.includes('ResizeObserver loop limit exceeded')
+            )) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function (e) {
+            if (e.reason && e.reason.message && (
+                e.reason.message.includes('ResizeObserver loop completed with undelivered notifications') ||
+                e.reason.message.includes('ResizeObserver loop limit exceeded')
+            )) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
+        });
+
+        if (typeof window.ResizeObserver !== 'undefined') {
+            const NativeResizeObserver = window.ResizeObserver;
+            window.ResizeObserver = class ResizeObserver extends NativeResizeObserver {
+                constructor(callback) {
+                    super((entries, observer) => {
+                        window.requestAnimationFrame(() => {
+                            try {
+                                callback(entries, observer);
+                            } catch (err) {
+                                if (!err.message || !err.message.includes('ResizeObserver loop completed with undelivered notifications')) {
+                                    throw err;
+                                }
+                            }
+                        });
+                    });
+                }
+            };
+        }
+    </script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Sans+SC:wght@400;700;900&display=swap');
+        body {
+            font-family: 'Noto Sans TC', 'Noto Sans SC', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+    <!-- 頂部 Header -->
+    <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <!-- 網站 Logo 與標題 -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 flex items-center justify-center text-2xl shadow-lg shadow-rose-500/20 animate-bounce">
+                    🤪
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-black bg-gradient-to-r from-amber-400 via-rose-400 to-purple-400 bg-clip-text text-transparent" data-i18n="title">
+                        沙雕動畫星球
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block" data-i18n="subtitle">
+                        每日更新最新沙雕爆笑短劇
+                    </p>
+                </div>
+            </div>
+
+            <!-- 繁簡轉換按鈕 -->
+            <button id="langToggleBtn" onclick="toggleLanguage()" class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-800 border border-slate-700 hover:border-brand-500 hover:text-brand-400 transition text-sm font-semibold shadow-inner">
+                <i class="fa-solid fa-language text-brand-500"></i>
+                <span id="langLabel">简体中文</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主要內容區域 -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+        <!-- 簡介卡片 -->
+        <div class="mb-8 p-6 rounded-3xl bg-slate-800/60 border border-slate-700/60 backdrop-blur-sm shadow-xl text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+                <h2 class="text-lg md:text-xl font-bold text-amber-400 mb-1 flex items-center justify-center md:justify-start gap-2" data-i18n="sectionHeader">
+                    <span>🔥</span> 爆笑動畫動態牆
+                </h2>
+                <p class="text-sm text-slate-300" data-i18n="sectionDesc">
+                    匯聚網絡熱門沙雕動畫與搞笑迷因短影片，點擊下方卡片即可輕鬆播放！
+                </p>
+            </div>
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-slate-700/50 border border-slate-600 text-xs text-slate-300 whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
+                <span data-i18n="statusText">即時動態更新中</span>
+            </div>
+        </div>
+
+        <!-- 嵌入 Elfsight Social Feed 模組區塊 -->
+        <div class="bg-slate-800/40 rounded-3xl p-4 md:p-6 border border-slate-800 shadow-2xl min-h-[400px]">
+            <!-- Elfsight Social Feed | Untitled Social Feed -->
+            <script src="https://elfsightcdn.com/platform.js" async></script>
+            <div class="elfsight-app-0f1f9911-317b-43a7-af4c-c20fa2c5492d" data-elfsight-app-lazy></div>
+        </div>
+    </main>
+
+    <!-- 頁尾 Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950 py-6 text-center text-xs text-slate-500">
+        <p data-i18n="footerText">
+            © 沙雕動畫星球 - 專治各種不開心，讓你笑出八顆牙齒
+        </p>
+    </footer>
+
+    <!-- 繁簡切換邏輯腳本 -->
+    <script>
+        // 多語言字典數據
+        const i18nData = {
+            'zh-TW': {
+                title: '沙雕動畫星球',
+                subtitle: '每日更新最新沙雕爆笑短劇',
+                sectionHeader: '爆笑動畫動態牆',
+                sectionDesc: '匯聚網絡熱門沙雕動畫與搞笑迷因短影片，點擊下方卡片即可輕鬆播放！',
+                statusText: '即時動態更新中',
+                footerText: '© 沙雕動畫星球 - 專治各種不開心，讓你笑出八顆牙齒',
+                btnText: '简体中文'
+            },
+            'zh-CN': {
+                title: '沙雕动画星球',
+                subtitle: '每日更新最新沙雕爆笑短剧',
+                sectionHeader: '爆笑动画动态墙',
+                sectionDesc: '汇聚网络热门沙雕动画与搞笑迷因短视频，点击下方卡片即可轻松播放！',
+                statusText: '实时动态更新中',
+                footerText: '© 沙雕动画星球 - 专治各种不开心，让你笑出八颗牙齿',
+                btnText: '繁體中文'
+            }
+        };
+
+        // 當前語言狀態，預設為繁體中文
+        let currentLang = 'zh-TW';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'zh-TW' ? 'zh-CN' : 'zh-TW';
+            updatePageLanguage();
+        }
+
+        function updatePageLanguage() {
+            const data = i18nData[currentLang];
+            
+            // 更新文字內容
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (data[key]) {
+                    el.innerText = data[key];
+                }
+            });
+
+            // 更新按鈕顯示文字
+            document.getElementById('langLabel').innerText = data.btnText;
+            
+            // 更新 html lang 屬性
+            document.documentElement.lang = currentLang;
+        }
+    </script>
+</body>
+</html>
